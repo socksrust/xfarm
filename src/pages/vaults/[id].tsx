@@ -80,7 +80,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { id } }) {
-  let pool = await getVaultByRef({ ref: id });
+  let pool = [];
 
   return {
     props: {
