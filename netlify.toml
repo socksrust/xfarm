@@ -1,0 +1,8 @@
+[build.environment]
+  NPM_FLAGS = "--version"
+  NETLIFY = "true"
+
+[build]
+  base = "front/octopus"
+  command = "npx pnpm install --store=node_modules/.pnpm-store && npx pnpm build"
+  publish = "out"

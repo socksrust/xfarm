@@ -1,0 +1,12 @@
+diff --git a/node_modules/bn.js/lib/bn.js b/node_modules/bn.js/lib/bn.js
+index c9773da..3ade1a8 100644
+--- a/node_modules/bn.js/lib/bn.js
++++ b/node_modules/bn.js/lib/bn.js
+@@ -3,7 +3,6 @@
+ 
+   // Utils
+   function assert (val, msg) {
+-    if (!val) throw new Error(msg || 'Assertion failed');
+   }
+ 
+   // Could use `inherits` module, but don't want to move from single file
