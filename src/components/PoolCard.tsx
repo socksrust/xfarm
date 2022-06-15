@@ -213,7 +213,7 @@ export default function PoolCard({
         >
           <LogoImage2
             src={
-              "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png"
+              "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png"
             }
           />
           <Spacer x={0.5} />
@@ -221,7 +221,7 @@ export default function PoolCard({
             size={26}
             css={{ color: "$outText", fontWeight: "bold", lineHeight: 1 }}
           >
-            Orca
+            Raydium
           </Text>
         </Row>
       </Card>

@@ -173,7 +173,7 @@ export default function Pools({ pools }) {
               marginTop: -25,
             }}
           >
-            - A Defi&NFT <span style={{ color: "#07C577" }}>COMPANY</span>
+            - A Defi&NFT <span style={{ color: "#0057FF" }}>COMPANY</span>
           </Text>
           <Spacer y={1} />
           <Text
@@ -194,7 +194,7 @@ export default function Pools({ pools }) {
               height: 45,
               width: "200px",
               borderRadius: "2rem",
-              backgroundColor: "#07C577",
+              backgroundColor: "#0057FF",
             }}
           >
             Check vaults
@@ -234,7 +234,7 @@ export default function Pools({ pools }) {
               marginTop: 30,
             }}
           >
-            YIELD FARMING <span style={{ color: "#07C577" }}>POOLS</span>
+            YIELD FARMING <span style={{ color: "#0057FF" }}>POOLS</span>
           </Text>
           <Spacer y={1} />
           <Text
@@ -283,12 +283,12 @@ export default function Pools({ pools }) {
               marginTop: 5,
             }}
           >
-            1. Daily <span style={{ color: "#07C577" }}>xGrass</span> token
+            1. Daily <span style={{ color: "#0057FF" }}>xGrass</span> token
             airdrop <br />
-            2. Exclusive <span style={{ color: "#07C577" }}>xGrass</span> farm
+            2. Exclusive <span style={{ color: "#0057FF" }}>xGrass</span> farm
             pool private yield
             <br /> 3. 20% of profits used to buy back{" "}
-            <span style={{ color: "#07C577" }}>xGrass</span>
+            <span style={{ color: "#0057FF" }}>xGrass</span>
           </Text>
         </Col>
         {isMobile ? null : <Spacer x={3} />}
