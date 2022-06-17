@@ -43,12 +43,12 @@ export const newInstructionDepositIntoVault = async ({
   depositorWalletAddress,
   vaultName,
   maxTokenA,
-  maxTokenB,
 }) => {
   const resp = await fetch(`${apiUrl}/newInstructionDepositIntoVault`, {
     body: JSON.stringify({
       depositorWalletAddress,
       vaultName,
+      maxTokenA,
     }),
     headers: {
       "Content-Type": "application/json",

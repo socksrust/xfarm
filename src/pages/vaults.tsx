@@ -12,9 +12,18 @@ import {
 import { initSdk } from "src/utils/quarry/initSdk";
 import { useWallet } from "@solana/wallet-adapter-react";
 import PoolCard from "src/components/PoolCard";
-import { fetchVoltLiquidities } from "src/programUtils/helpers";
-import { getVaults } from "src/RpcFetch";
+import { connection, fetchVoltLiquidities } from "src/programUtils/helpers";
+import {
+  getVaults,
+  newInstructionInitUserVault,
+  newInstructionDepositIntoVault,
+} from "src/RpcFetch";
 import { calc } from "@chakra-ui/react";
+import {
+  TransactionInstruction,
+  Transaction,
+  PublicKey,
+} from "@solana/web3.js";
 
 export async function getStaticProps() {
   let newVaults: any = [
@@ -109,16 +118,111 @@ export async function getStaticProps() {
   };
 }
 
-export default function Pools({ pools }) {
+export default function Vaults({ pools }) {
   const { wallet: will, signTransaction } = useWallet();
   const wallet = will?.adapter;
 
-  const [vaultName, setVaultName] = useState("RDM.STC.RAY-USDC");
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [vaultName, setVaultName] = useState("RDM.STC.SOL-USDC-V5");
+  const [isModalVisible, setModalVisible] = useState(true);
   if (typeof window === "undefined") return <></>;
   const isMobile = window.innerWidth < 790;
 
   console.log("pools", pools);
+
+  const initUser = async () => {
+    if (!wallet || !signTransaction) {
+      return;
+    }
+
+    const json_data = (
+      await newInstructionInitUserVault({
+        depositorWalletAddress: wallet?.publicKey,
+        vaultName,
+      })
+    ).data;
+    const accounts: any = [];
+
+    json_data.accounts.forEach(function (item, index) {
+      let acc = {
+        isSigner: item.is_signer ? true : false,
+        isWritable: item.is_writable ? true : false,
+        pubkey: new PublicKey(item.pubkey),
+      };
+      accounts.push(acc);
+    });
+    const instruction = new TransactionInstruction({
+      programId: new PublicKey(json_data.program_id),
+      data: json_data.data,
+      keys: accounts,
+    });
+
+    let transaction = new Transaction({
+      recentBlockhash: (await connection.getRecentBlockhash()).blockhash,
+      feePayer: wallet.publicKey,
+    });
+    transaction.add(instruction);
+
+    let signed = await signTransaction(transaction);
+    let signature = await connection.sendRawTransaction(signed.serialize());
+  };
+
+  const deposit = async () => {
+    if (!wallet?.publicKey || !signTransaction) {
+      return;
+    }
+
+    const json_data = (
+      await newInstructionDepositIntoVault({
+        depositorWalletAddress: wallet?.publicKey?.toString(),
+        vaultName,
+        maxTokenA: 0.2,
+      })
+    ).data;
+    console.log("json_data", json_data);
+
+    //const instructions: TransactionInstruction[] = [];
+    for (let data of json_data) {
+      let transaction = new Transaction({
+        recentBlockhash: (await connection.getRecentBlockhash()).blockhash,
+        feePayer: wallet.publicKey,
+      });
+      const accounts: any = [];
+
+      data.accounts.forEach(function (item, index) {
+        let acc = {
+          isSigner: item.is_signer ? true : false,
+          isWritable: item.is_writable ? true : false,
+          pubkey: new PublicKey(item.pubkey),
+        };
+        accounts.push(acc);
+      });
+      const instruction = new TransactionInstruction({
+        programId: new PublicKey(data.program_id),
+        data: data.data,
+        keys: accounts,
+      });
+      transaction.add(instruction);
+      let signed = await signTransaction(transaction);
+      let signature = await connection.sendRawTransaction(signed.serialize());
+      await connection.confirmTransaction(signature, "max");
+    }
+
+    let index = 0;
+    let multiplier = 0;
+    //console.log("instructions.length", instructions.length);
+    /*for (let i = 0; i <= instructions.length; i++) {
+      if (i % 5 === 0 || i === instructions.length) {
+        
+        const leftHander = 0 + multiplier * i;
+
+        instructions.slice(leftHander, i).map((ix) => {
+          transaction.add(ix);
+        });
+        multiplier += 1;
+
+      }
+    }*/
+  };
 
   return (
     <motion.div
@@ -191,8 +295,12 @@ export default function Pools({ pools }) {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button auto>Init user</Button>
-          <Button auto>Deposit</Button>
+          <Button auto onClick={initUser}>
+            Init user
+          </Button>
+          <Button auto onClick={deposit}>
+            Deposit
+          </Button>
         </Modal.Footer>
       </Modal>
     </motion.div>

@@ -1,10 +1,11 @@
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
-      const { depositorWalletAddress, vaultName } = req.body;
-      console.log('url ->',       `http://0.0.0.0:9090/api/v1/new_instruction_add_liquidity_vault?wallet_address=BakZMixrKdJgZn9dx1fe5GK1EbToVP7yyrBp4tYtjZJ&vault_name=RDM.STC.RAY-USDC&max_token_a_ui_amount=0.1&max_token_b_ui_amount=0.1`)
+      const { depositorWalletAddress, vaultName, maxTokenA, maxTokenB } = req.body;
+      const url = `http://0.0.0.0:9090/api/v1/all_instructions_add_liquidity_vault?wallet_address=${depositorWalletAddress}&vault_name=${vaultName}&max_token_a_ui_amount=${maxTokenA}&max_token_b_ui_amount=0`
+      console.log('url ->', url)
       const resp = await fetch(
-      `http://0.0.0.0:9090/api/v1/new_instruction_add_liquidity_vault?wallet_address=BakZMixrKdJgZn9dx1fe5GK1EbToVP7yyrBp4tYtjZJ&vault_name=RDM.STC.RAY-USDC&max_token_a_ui_amount=0.1&max_token_b_ui_amount=0.1`,
+      url,
       {
         headers: {
           "Content-Type": "application/json",

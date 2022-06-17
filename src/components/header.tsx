@@ -72,6 +72,13 @@ const Header = () => {
             </Text>
           </Link>
         </Row>
+        <Row
+          justify={"flex-end"}
+          align="center"
+          style={isMobile ? { display: "none" } : {}}
+        >
+          <ConnectWalletButton />
+        </Row>
       </Flex>
     </Flex>
   );
