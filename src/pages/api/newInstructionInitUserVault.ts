@@ -5,7 +5,7 @@ export default async function handler(req, res) {
       const { depositorWalletAddress, vaultName } = req.body;
 
       const resp = await fetch(
-      `http://0.0.0.0:9090/api/v1/new_instruction_user_init_vault?wallet_address=${depositorWalletAddress}&vault_name=${vaultName}`,
+      `https://farm-rpc.herokuapp.com/api/v1/new_instruction_user_init_vault?wallet_address=${depositorWalletAddress}&vault_name=${vaultName}`,
       {
         /*body: JSON.stringify({
         id,

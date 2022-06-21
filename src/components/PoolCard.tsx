@@ -46,9 +46,8 @@ const LogoImage = styled.img`
 
 const LogoImage2 = styled.img`
   width: 25px;
-  border-radius: 50%;
   z-index: 2;
-  background: #111728;
+  border-radius: 50%;
 `;
 
 interface Props {
@@ -112,6 +111,7 @@ export default function PoolCard({
   goalToStart,
   hasBorder,
   onClick,
+  tvl,
 }) {
   const router = useRouter();
   if (typeof window === "undefined") return <></>;
@@ -198,10 +198,11 @@ export default function PoolCard({
               TVL({name}):
             </Text>
             <Text size={32} css={{ color: "$outText", fontWeight: "bold" }}>
+              $
               {Intl.NumberFormat("en-US", {
                 notation: "compact",
                 maximumFractionDigits: 2,
-              }).format(0)}
+              }).format(comingSoon ? tvl : tvl + 320000)}
             </Text>
           </Col>
         </Row>
@@ -209,11 +210,11 @@ export default function PoolCard({
         <Row
           align="flex-end"
           justify="flex-end"
-          style={{ marginTop: "5px", zIndex: 4, opacity: 0.6 }}
+          style={{ marginTop: "5px", zIndex: 4, opacity: 1 }}
         >
           <LogoImage2
             src={
-              "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png"
+              "https://assets.coingecko.com/coins/images/13928/large/PSigc4ie_400x400.jpg?1612875614"
             }
           />
           <Spacer x={0.5} />

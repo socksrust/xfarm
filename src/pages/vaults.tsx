@@ -8,7 +8,11 @@ import {
   Checkbox,
   Input,
   Spacer,
+  Col,
+  Loading,
 } from "@nextui-org/react";
+
+import styled from "styled-components";
 import { initSdk } from "src/utils/quarry/initSdk";
 import { useWallet } from "@solana/wallet-adapter-react";
 import PoolCard from "src/components/PoolCard";
@@ -17,6 +21,7 @@ import {
   getVaults,
   newInstructionInitUserVault,
   newInstructionDepositIntoVault,
+  newInstructionWithdrawFromVault,
 } from "src/RpcFetch";
 import { calc } from "@chakra-ui/react";
 import {
@@ -24,17 +29,29 @@ import {
   Transaction,
   PublicKey,
 } from "@solana/web3.js";
+import { Range, getTrackBackground } from "react-range";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+
+const Logo = styled.img`
+  width: 40px;
+  border-radius: 50%;
+`;
 
 export async function getStaticProps() {
   let newVaults: any = [
     {
       name: "SOL-USDC",
+      vaultName: "RDM.STC.SOL-USDC-V5",
+      cTokenMint: "7GXC6tpUwdbHRd8hhyreKBQsJ5zqvx2JueYydQdxEp3N",
       aTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+      aTokenDecimals: 9,
+
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "50%",
-      comingSoon: true,
+      bTokenDecimals: 6,
+      apy: "69%",
+      comingSoon: false,
     },
     {
       name: "GST-USDC",
@@ -43,6 +60,7 @@ export async function getStaticProps() {
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       apy: "137%",
       comingSoon: true,
+      tvl: 0,
     },
     {
       name: "GMT-USDC",
@@ -51,6 +69,7 @@ export async function getStaticProps() {
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       apy: "101%",
       comingSoon: true,
+      tvl: 0,
     },
     {
       name: "mSOL-USDT",
@@ -58,6 +77,7 @@ export async function getStaticProps() {
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       apy: "26%",
       comingSoon: true,
+      tvl: 0,
     },
     {
       name: "SOL-USDT",
@@ -67,6 +87,7 @@ export async function getStaticProps() {
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       apy: "33%",
       comingSoon: true,
+      tvl: 0,
     },
     {
       name: "USDC-USDT",
@@ -75,15 +96,9 @@ export async function getStaticProps() {
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       apy: "3%",
       comingSoon: true,
+      tvl: 0,
     },
-    {
-      name: "SHDW-USDC",
-      aTokenImage: "https://www.orca.so/static/media/shdw.298c8fb2.png",
-      bTokenImage:
-        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "18%",
-      comingSoon: true,
-    },
+
     {
       name: "ETH-USDC",
       aTokenImage: "https://www.orca.so/static/media/eth.7c199546.svg",
@@ -91,6 +106,7 @@ export async function getStaticProps() {
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       apy: "11%",
       comingSoon: true,
+      tvl: 0,
     },
     {
       name: "SHDW-SOL",
@@ -99,6 +115,7 @@ export async function getStaticProps() {
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
       apy: "12%",
       comingSoon: true,
+      tvl: 0,
     },
     {
       name: "stSOL-USDC",
@@ -107,8 +124,40 @@ export async function getStaticProps() {
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       apy: "44%",
       comingSoon: true,
+      tvl: 0,
     },
   ];
+
+  let i = 0;
+  for (let vault of newVaults) {
+    if (vault.comingSoon) {
+      break;
+    }
+    const data = await (
+      await fetch(
+        `http://127.0.0.1:9090/api/v1/vault_info?vault_name=${vault.vaultName}`
+      )
+    ).json();
+    const aTokenBalance = data.tokens_a_added - data.tokens_a_removed;
+    const bTokenBalance = data.tokens_b_added - data.tokens_b_removed;
+
+    const tvl = (bTokenBalance / 10 ** vault.bTokenDecimals) * 2;
+
+    const totalLiquidity = Number(
+      (await connection.getTokenSupply(new PublicKey(vault.cTokenMint)))?.value
+        ?.amount || 0
+    );
+    const aTokenBalancePerCToken = aTokenBalance / totalLiquidity;
+    const bTokenBalancePerCToken = bTokenBalance / totalLiquidity;
+
+    newVaults[i] = {
+      ...vault,
+      tvl,
+      aTokenBalancePerCToken,
+      bTokenBalancePerCToken,
+    };
+    i++;
+  }
 
   return {
     props: {
@@ -119,68 +168,91 @@ export async function getStaticProps() {
 }
 
 export default function Vaults({ pools }) {
-  const { wallet: will, signTransaction } = useWallet();
+  const { wallet: will, signTransaction, signAllTransactions } = useWallet();
   const wallet = will?.adapter;
+  const [isDepositLoading, setDepositLoading] = React.useState(false);
 
-  const [vaultName, setVaultName] = useState("RDM.STC.SOL-USDC-V5");
-  const [isModalVisible, setModalVisible] = useState(true);
+  const [tokenA, setTokenA] = useState();
+  const [isDeposit, setIsDeposit] = useState(true);
+  const [vault, setVault] = useState<any>();
+  const [price, setPrice] = useState<number>();
+  const [balance, setBalance] = useState<number>(0.1);
+  const [isModalVisible, setModalVisible] = useState(false);
   if (typeof window === "undefined") return <></>;
   const isMobile = window.innerWidth < 790;
 
   console.log("pools", pools);
 
-  const initUser = async () => {
-    if (!wallet || !signTransaction) {
-      return;
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const tokenASymbol = vault?.name.split("-")[0];
+      const tokenBSymbol = vault?.name.split("-")[1];
+      const data = (
+        await (
+          await fetch(
+            `https://price.jup.ag/v1/price?id=${tokenASymbol}&vsToken=${tokenBSymbol}`
+          )
+        ).json()
+      ).data;
+      setPrice(data.price);
+    };
+
+    const fetchUserCTokenBalance = async () => {
+      try {
+        const walletTokens = await connection.getParsedTokenAccountsByOwner(
+          wallet?.publicKey,
+          {
+            programId: TOKEN_PROGRAM_ID,
+          }
+        );
+
+        const poolTokenAccount = walletTokens.value.find(
+          (wt) => wt.account.data.parsed.info.mint === vault.cTokenMint
+        );
+
+        const balance = Number(
+          (await connection.getTokenAccountBalance(poolTokenAccount?.pubkey!))
+            ?.value?.amount || 0
+        );
+        console.log("balance", balance);
+
+        setBalance(balance);
+      } catch (e) {
+        setBalance(0);
+      }
+    };
+
+    if (wallet?.publicKey && vault) {
+      fetchUserCTokenBalance();
     }
 
-    const json_data = (
-      await newInstructionInitUserVault({
-        depositorWalletAddress: wallet?.publicKey,
-        vaultName,
-      })
-    ).data;
-    const accounts: any = [];
-
-    json_data.accounts.forEach(function (item, index) {
-      let acc = {
-        isSigner: item.is_signer ? true : false,
-        isWritable: item.is_writable ? true : false,
-        pubkey: new PublicKey(item.pubkey),
-      };
-      accounts.push(acc);
-    });
-    const instruction = new TransactionInstruction({
-      programId: new PublicKey(json_data.program_id),
-      data: json_data.data,
-      keys: accounts,
-    });
-
-    let transaction = new Transaction({
-      recentBlockhash: (await connection.getRecentBlockhash()).blockhash,
-      feePayer: wallet.publicKey,
-    });
-    transaction.add(instruction);
-
-    let signed = await signTransaction(transaction);
-    let signature = await connection.sendRawTransaction(signed.serialize());
-  };
+    if (wallet?.publicKey && vault) {
+      fetchPrice();
+    }
+  }, [vault]);
 
   const deposit = async () => {
-    if (!wallet?.publicKey || !signTransaction) {
+    if (
+      !wallet?.publicKey ||
+      !signTransaction ||
+      !signAllTransactions ||
+      !vault
+    ) {
       return;
     }
+
+    setDepositLoading(true);
 
     const json_data = (
       await newInstructionDepositIntoVault({
         depositorWalletAddress: wallet?.publicKey?.toString(),
-        vaultName,
-        maxTokenA: 0.2,
+        vaultName: vault?.vaultName,
+        maxTokenA: tokenA,
       })
     ).data;
     console.log("json_data", json_data);
 
-    //const instructions: TransactionInstruction[] = [];
+    const instructions: TransactionInstruction[] = [];
     for (let data of json_data) {
       let transaction = new Transaction({
         recentBlockhash: (await connection.getRecentBlockhash()).blockhash,
@@ -201,27 +273,126 @@ export default function Vaults({ pools }) {
         data: data.data,
         keys: accounts,
       });
-      transaction.add(instruction);
-      let signed = await signTransaction(transaction);
-      let signature = await connection.sendRawTransaction(signed.serialize());
-      await connection.confirmTransaction(signature, "max");
+      instructions.push(instruction);
     }
 
-    let index = 0;
-    let multiplier = 0;
-    //console.log("instructions.length", instructions.length);
-    /*for (let i = 0; i <= instructions.length; i++) {
-      if (i % 5 === 0 || i === instructions.length) {
-        
-        const leftHander = 0 + multiplier * i;
+    const tx_size = 1;
 
-        instructions.slice(leftHander, i).map((ix) => {
-          transaction.add(ix);
+    const transactions: Transaction[] = [];
+    for (let i = 0; i < instructions.length; i += tx_size) {
+      const chunk = instructions.slice(i, i + tx_size);
+      const transaction = new Transaction().add(...chunk);
+
+      transaction.feePayer = wallet.publicKey;
+      transaction.recentBlockhash = (
+        await connection.getRecentBlockhash()
+      ).blockhash;
+      transactions.push(transaction);
+    }
+    const signedTXs = await signAllTransactions(transactions);
+
+    for (const signedTX of signedTXs) {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        const buf = signedTX.serialize();
+        const id = await connection.sendRawTransaction(buf, {
+          skipPreflight: true,
         });
-        multiplier += 1;
-
+        console.log("Confirming tx...");
+        await connection.confirmTransaction(id, "processed");
+        console.log("confirmed");
+        console.log("");
+        console.log("");
+        console.log("=====================");
+      } catch (e) {
+        setDepositLoading(false);
+        console.log(e);
       }
-    }*/
+    }
+    setDepositLoading(false);
+  };
+
+  const withdraw = async () => {
+    if (
+      !wallet?.publicKey ||
+      !signTransaction ||
+      !signAllTransactions ||
+      !vault
+    ) {
+      return;
+    }
+
+    setDepositLoading(true);
+
+    const json_data = (
+      await newInstructionWithdrawFromVault({
+        depositorWalletAddress: wallet?.publicKey?.toString(),
+        vaultName: vault?.vaultName,
+        maxToken: balance / 10 ** 9,
+      })
+    ).data;
+    console.log("json_data", json_data);
+
+    const instructions: TransactionInstruction[] = [];
+    for (let data of json_data) {
+      let transaction = new Transaction({
+        recentBlockhash: (await connection.getRecentBlockhash()).blockhash,
+        feePayer: wallet.publicKey,
+      });
+      const accounts: any = [];
+
+      data.accounts.forEach(function (item, index) {
+        let acc = {
+          isSigner: item.is_signer ? true : false,
+          isWritable: item.is_writable ? true : false,
+          pubkey: new PublicKey(item.pubkey),
+        };
+        accounts.push(acc);
+      });
+      const instruction = new TransactionInstruction({
+        programId: new PublicKey(data.program_id),
+        data: data.data,
+        keys: accounts,
+      });
+      instructions.push(instruction);
+    }
+
+    const tx_size = 1;
+
+    const transactions: Transaction[] = [];
+    for (let i = 0; i < instructions.length; i += tx_size) {
+      const chunk = instructions.slice(i, i + tx_size);
+      const transaction = new Transaction().add(...chunk);
+
+      transaction.feePayer = wallet.publicKey;
+      transaction.recentBlockhash = (
+        await connection.getRecentBlockhash()
+      ).blockhash;
+      transactions.push(transaction);
+    }
+    const signedTXs = await signAllTransactions(transactions);
+
+    for (const signedTX of signedTXs) {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        const buf = signedTX.serialize();
+        const id = await connection.sendRawTransaction(buf, {
+          skipPreflight: true,
+        });
+        console.log("Confirming tx...");
+        await connection.confirmTransaction(id, "finalized");
+        console.log("confirmed");
+        console.log("");
+        console.log("");
+        console.log("=====================");
+      } catch (e) {
+        setDepositLoading(false);
+        console.log(e);
+      }
+    }
+    setDepositLoading(false);
   };
 
   return (
@@ -255,7 +426,8 @@ export default function Vaults({ pools }) {
             <PoolCard
               {...pool}
               onClick={() => {
-                setVaultName(pool.name);
+                setModalVisible(true);
+                setVault(pool);
               }}
             />
           ))}
@@ -268,39 +440,114 @@ export default function Vaults({ pools }) {
         onClose={() => setModalVisible(false)}
       >
         <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Deposit
-          </Text>
+          <Row justify="center">
+            <Button.Group color="gradient" size="lg">
+              <Button ghost={!isDeposit} onClick={() => setIsDeposit(true)}>
+                Deposit
+              </Button>
+              <Button ghost={isDeposit} onClick={() => setIsDeposit(false)}>
+                Withdraw
+              </Button>
+            </Button.Group>
+          </Row>
         </Modal.Header>
-        <Modal.Body>
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="RAY"
-            type="number"
-            value={1}
-          />
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="USDC"
-            type="number"
-            value={1}
-          />
-        </Modal.Body>
+        {isDeposit ? (
+          <Modal.Body>
+            <Spacer y={0.5} />
+            <Row align="center">
+              <Input
+                clearable
+                bordered
+                fullWidth
+                color="primary"
+                size="xl"
+                placeholder={vault?.name.split("-")[0]}
+                type="number"
+                value={tokenA}
+                onChange={(e) => setTokenA(Number(e.target.value))}
+              />
+              <Spacer x={0.5} />
+              <Logo src={vault?.aTokenImage} />
+            </Row>
+            <Spacer y={0.3} />
+            <Row align="center">
+              <Input
+                clearable
+                bordered
+                fullWidth
+                color="primary"
+                size="xl"
+                placeholder={vault?.name.split("-")[1]}
+                type="number"
+                disabled
+                value={price && tokenA ? (price * tokenA).toFixed(2) : 0}
+              />
+              <Spacer x={0.5} />
+              <Logo src={vault?.bTokenImage} />
+            </Row>
+            <Spacer y={0.5} />
+          </Modal.Body>
+        ) : (
+          <Modal.Body>
+            <Row align="center">
+              <Input
+                clearable
+                bordered
+                fullWidth
+                color="primary"
+                size="xl"
+                placeholder={vault?.name.split("-")[0]}
+                type="number"
+                disabled
+                value={(
+                  (balance * vault?.aTokenBalancePerCToken) /
+                  10 ** vault.aTokenDecimals
+                ).toFixed(4)}
+              />
+              <Spacer x={0.5} />
+              <Logo src={vault?.aTokenImage} />
+            </Row>
+            <Spacer y={0.3} />
+            <Row align="center">
+              <Input
+                clearable
+                bordered
+                fullWidth
+                color="primary"
+                size="xl"
+                placeholder={vault?.name.split("-")[1]}
+                type="number"
+                disabled
+                value={(
+                  (balance * vault?.bTokenBalancePerCToken) /
+                  10 ** vault?.bTokenDecimals
+                ).toFixed(4)}
+              />
+              <Spacer x={0.5} />
+              <Logo src={vault?.bTokenImage} />
+            </Row>
+            <Spacer y={0.5} />
+          </Modal.Body>
+        )}
         <Modal.Footer>
-          <Button auto onClick={initUser}>
-            Init user
+          <Button
+            auto
+            onClick={isDeposit ? deposit : withdraw}
+            style={{
+              height: 45,
+              width: "100%",
+              borderRadius: "2rem",
+            }}
+          >
+            {isDepositLoading ? (
+              <Loading type="points-opacity" color="currentColor" size="sm" />
+            ) : (
+              <Text size={16} css={{ color: "#fff", fontWeight: "700" }}>
+                {isDeposit ? `Deposit` : `Withdraw all`}
+              </Text>
+            )}
           </Button>
-          <Button auto onClick={deposit}>
-            Deposit
-          </Button>
+          <Spacer y={0.5} />
         </Modal.Footer>
       </Modal>
     </motion.div>

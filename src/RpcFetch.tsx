@@ -6,7 +6,7 @@ interface Deposit {
 
 export const getVaultByRef = async ({ ref }: Deposit) => {
   const resp = await fetch(
-    `http://0.0.0.0:9090/api/v1/vault_by_ref?vault_ref=${ref}`,
+    `https://farm-rpc.herokuapp.com/api/v1/vault_by_ref?vault_ref=${ref}`,
     {
       /*body: JSON.stringify({
       id,
@@ -24,7 +24,7 @@ export const getVaultByRef = async ({ ref }: Deposit) => {
 };
 
 export const getVaults = async () => {
-  const resp = await fetch(`http://0.0.0.0:9090/api/v1/vaults`, {
+  const resp = await fetch(`https://farm-rpc.herokuapp.com/api/v1/vaults`, {
     /*body: JSON.stringify({
       id,
       totalLiquidity,
@@ -49,6 +49,27 @@ export const newInstructionDepositIntoVault = async ({
       depositorWalletAddress,
       vaultName,
       maxTokenA,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  });
+  const parsedResponse = await resp.json();
+
+  return parsedResponse;
+};
+
+export const newInstructionWithdrawFromVault = async ({
+  depositorWalletAddress,
+  vaultName,
+  maxToken,
+}) => {
+  const resp = await fetch(`${apiUrl}/newInstructionWithdrawFromVault`, {
+    body: JSON.stringify({
+      depositorWalletAddress,
+      vaultName,
+      maxToken,
     }),
     headers: {
       "Content-Type": "application/json",
