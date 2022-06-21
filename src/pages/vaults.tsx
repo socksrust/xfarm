@@ -135,7 +135,7 @@ export async function getStaticProps() {
     }
     const data = await (
       await fetch(
-        `http://127.0.0.1:9090/api/v1/vault_info?vault_name=${vault.vaultName}`
+        `https://farm-rpc.herokuapp.com/api/v1/vault_info?vault_name=${vault.vaultName}`
       )
     ).json();
     const aTokenBalance = data.tokens_a_added - data.tokens_a_removed;
