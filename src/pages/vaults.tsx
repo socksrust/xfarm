@@ -56,83 +56,120 @@ export async function getStaticProps() {
       comingSoon: false,
     },
     {
-      name: "GST-USDC",
-      aTokenImage: "https://www.orca.so/static/media/gst.3f56d90f.png",
+      name: "RAY-SOL",
+      vaultName: "RDM.STC.RAY-SOL-V3",
+      cTokenMint: "E3TujPKgiCDyj3XEKtZxKvdyveqU1Z6WhNQufBcT55YP",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+      aTokenDecimals: 6,
+
       bTokenImage:
-        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "137%",
-      comingSoon: true,
-      tvl: 0,
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+      bTokenDecimals: 9,
+      apy: "20%",
+      comingSoon: false,
     },
     {
-      name: "GMT-USDC",
-      aTokenImage: "https://www.orca.so/static/media/gmt.770533cf.png",
+      name: "RAY-USDC",
+      vaultName: "RDM.STC.RAY-USDC-V3",
+      cTokenMint: "C7mzEPhnzGCHorjESopDD5BKoHoQuojneVE2SQi24mU1",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+      aTokenDecimals: 6,
+
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "101%",
-      comingSoon: true,
-      tvl: 0,
+      bTokenDecimals: 6,
+      apy: "20%",
+      comingSoon: false,
     },
     {
-      name: "mSOL-USDT",
-      aTokenImage: "https://www.orca.so/static/media/msol.9d7d818d.png",
+      name: "RAY-USDT",
+      vaultName: "RDM.STC.RAY-USDT-V3",
+      cTokenMint: "6qS4xQKwArKPG9xZq7o4G7HsjfpHcLroS8n4oHD6DiqL",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+      aTokenDecimals: 6,
+
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
-      apy: "26%",
-      comingSoon: true,
-      tvl: 0,
+      bTokenDecimals: 6,
+      apy: "20%",
+      comingSoon: false,
     },
     {
       name: "SOL-USDT",
+      vaultName: "RDM.STC.SOL-USDT-V5",
+      cTokenMint: "7iP3Ex3cmneFtwEyQHgTvr6pZns2wNpdJuTWXqy5zD45",
       aTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+      aTokenDecimals: 9,
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
-      apy: "33%",
-      comingSoon: true,
-      tvl: 0,
+      bTokenDecimals: 6,
+      apy: "69%",
+      comingSoon: false,
     },
     {
-      name: "USDC-USDT",
-      bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
+      name: "GENE-USDC",
+      vaultName: "RDM.STC.GENE-USDC-V5",
+      cTokenMint: "5D3R5qn8mwviL36HYBefGwTgkcS865jomn53Aye12D3x",
       aTokenImage:
-        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "3%",
-      comingSoon: true,
-      tvl: 0,
-    },
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/GENEtH5amGSi8kHAtQoezp1XEXwZJ8vcuePYnXdKrMYz/logo.png",
+      aTokenDecimals: 9,
 
-    {
-      name: "ETH-USDC",
-      aTokenImage: "https://www.orca.so/static/media/eth.7c199546.svg",
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "11%",
-      comingSoon: true,
-      tvl: 0,
+      bTokenDecimals: 6,
+      apy: "69%",
+      comingSoon: false,
     },
     {
-      name: "SHDW-SOL",
-      aTokenImage: "https://www.orca.so/static/media/shdw.298c8fb2.png",
+      name: "RAY-SRM",
+      vaultName: "RDM.STC.RAY-SRM-V5",
+      cTokenMint: "AecqaerzqzbKwMJjJ6CtrrH6e2RKrkE8HmjQyjHFJM6v",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+      aTokenDecimals: 6,
+
       bTokenImage:
-        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-      apy: "12%",
-      comingSoon: true,
-      tvl: 0,
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt/logo.png",
+      bTokenDecimals: 6,
+      apy: "20%",
+      comingSoon: false,
     },
     {
-      name: "stSOL-USDC",
-      aTokenImage: "https://www.orca.so/static/media/stSOL.9fd59818.png",
+      name: "GENE-RAY",
+      vaultName: "RDM.STC.GENE-RAY-V5",
+      cTokenMint: "6PWqZ2rxYK4AW5sWCCAHMGJiEGeqEazcjv3AUFoAF4p8",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/GENEtH5amGSi8kHAtQoezp1XEXwZJ8vcuePYnXdKrMYz/logo.png",
+      aTokenDecimals: 9,
+
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+      bTokenDecimals: 6,
+      apy: "69%",
+      comingSoon: false,
+    },
+    {
+      name: "ATLAS-USDC",
+      vaultName: "RDM.STC.ATLAS-USDC-V5",
+      cTokenMint: "DbiUMveHwhk4AFkxVDAqrkvXRxNMSsULnr2XSkJy6LLc",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/ATLASXmbPQxBUYbxPsV97usA3fPQYEqzQBUHgiFCUsXx/logo.png",
+      aTokenDecimals: 8,
+
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
-      apy: "44%",
-      comingSoon: true,
-      tvl: 0,
+      bTokenDecimals: 6,
+      apy: "69%",
+      comingSoon: false,
     },
   ];
 
   let i = 0;
   for (let vault of newVaults) {
-    if (vault.comingSoon) {
+    if (vault.comingSoon || !vault.cTokenMint) {
       break;
     }
     const data = await (
@@ -209,7 +246,7 @@ export default function Vaults({ pools }) {
         );
 
         const poolTokenAccount = walletTokens.value.find(
-          (wt) => wt.account.data.parsed.info.mint === pools[0].cTokenMint
+          (wt) => wt.account.data.parsed.info.mint === vault.cTokenMint
         );
 
         const balance = Number(
@@ -224,10 +261,10 @@ export default function Vaults({ pools }) {
       }
     };
 
-    if (wallet?.publicKey && pools && pools[0] && !balance) {
+    if (wallet?.publicKey && vault) {
       fetchUserCTokenBalance();
     }
-  }, [wallet?.publicKey, pools]);
+  }, [wallet?.publicKey, vault]);
 
   const deposit = async () => {
     if (

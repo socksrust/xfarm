@@ -37,8 +37,8 @@ function ComingSoonBadge() {
 }
 
 const LogoImage = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
 
   border-radius: 50%;
   z-index: 3;
@@ -152,7 +152,7 @@ export default function PoolCard({
             style={{ zIndex: 9, marginLeft: "-20px" }}
           />
           <Spacer x={0.8} />
-          <Text size={32} css={{ color: "$outText", fontWeight: "bold" }}>
+          <Text size={28} css={{ color: "$outText", fontWeight: "bold" }}>
             {name}
           </Text>
         </Row>
@@ -198,7 +198,7 @@ export default function PoolCard({
             >
               APY:
             </Text>
-            <Text size={32} css={{ color: "$outText", fontWeight: "bold" }}>
+            <Text size={28} css={{ color: "$outText", fontWeight: "bold" }}>
               {apy}
             </Text>
           </Col>
@@ -213,7 +213,7 @@ export default function PoolCard({
             >
               TVL({name}):
             </Text>
-            <Text size={32} css={{ color: "$outText", fontWeight: "bold" }}>
+            <Text size={28} css={{ color: "$outText", fontWeight: "bold" }}>
               $
               {Intl.NumberFormat("en-US", {
                 notation: "compact",
@@ -222,7 +222,7 @@ export default function PoolCard({
             </Text>
           </Col>
         </Row>
-        <Spacer y={1.5} />
+        <Spacer y={1} />
         <Row
           align="flex-end"
           justify="flex-end"
