@@ -112,10 +112,26 @@ export default function PoolCard({
   hasBorder,
   onClick,
   tvl,
+  price,
+  aTokenBalancePerCToken,
+  bTokenBalancePerCToken,
+  bTokenDecimals,
+  aTokenDecimals,
+  balance,
 }) {
   const router = useRouter();
   if (typeof window === "undefined") return <></>;
   const tokenName = name.split(".")[2];
+
+  const userTvl =
+    balance && !comingSoon
+      ? (aTokenBalancePerCToken * balance * price) / 10 ** aTokenDecimals +
+        (bTokenBalancePerCToken * balance) / 10 ** bTokenDecimals
+      : 0;
+
+  console.log("userTvl", userTvl);
+  console.log("balance", balance);
+  console.log({ aTokenBalancePerCToken, balance, price, aTokenDecimals });
   return (
     <OutWrapper
       style={{

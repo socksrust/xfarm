@@ -12,7 +12,7 @@ import {
   Loading,
   Progress,
 } from "@nextui-org/react";
-
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { initSdk } from "src/utils/quarry/initSdk";
 import { useConnectedWallet, useSolana } from "@saberhq/use-solana";
@@ -152,11 +152,22 @@ export async function getStaticProps() {
     const aTokenBalancePerCToken = aTokenBalance / totalLiquidity;
     const bTokenBalancePerCToken = bTokenBalance / totalLiquidity;
 
+    const tokenASymbol = vault?.name.split("-")[0];
+    const tokenBSymbol = vault?.name.split("-")[1];
+    const priceData = (
+      await (
+        await fetch(
+          `https://price.jup.ag/v1/price?id=${tokenASymbol}&vsToken=${tokenBSymbol}`
+        )
+      ).json()
+    ).data;
+
     newVaults[i] = {
       ...vault,
       tvl,
       aTokenBalancePerCToken,
       bTokenBalancePerCToken,
+      price: priceData.price,
     };
     i++;
   }
@@ -172,13 +183,12 @@ export async function getStaticProps() {
 export default function Vaults({ pools }) {
   const wallet = useConnectedWallet();
   const [isDepositLoading, setDepositLoading] = React.useState(false);
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(100);
 
   const [tokenA, setTokenA] = useState();
   const [tokenB, setTokenB] = useState();
   const [isDeposit, setIsDeposit] = useState(true);
   const [vault, setVault] = useState<any>();
-  const [price, setPrice] = useState<number>();
   const [balance, setBalance] = useState<number>(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInfoModalVisible, setInfoModalVisible] = useState(false);
@@ -189,19 +199,6 @@ export default function Vaults({ pools }) {
   const isMobile = window.innerWidth < 790;
 
   useEffect(() => {
-    const fetchPrice = async () => {
-      const tokenASymbol = vault?.name.split("-")[0];
-      const tokenBSymbol = vault?.name.split("-")[1];
-      const data = (
-        await (
-          await fetch(
-            `https://price.jup.ag/v1/price?id=${tokenASymbol}&vsToken=${tokenBSymbol}`
-          )
-        ).json()
-      ).data;
-      setPrice(data.price);
-    };
-
     const fetchUserCTokenBalance = async () => {
       try {
         const walletTokens = await connection.getParsedTokenAccountsByOwner(
@@ -212,7 +209,7 @@ export default function Vaults({ pools }) {
         );
 
         const poolTokenAccount = walletTokens.value.find(
-          (wt) => wt.account.data.parsed.info.mint === vault.cTokenMint
+          (wt) => wt.account.data.parsed.info.mint === pools[0].cTokenMint
         );
 
         const balance = Number(
@@ -227,14 +224,10 @@ export default function Vaults({ pools }) {
       }
     };
 
-    if (wallet?.publicKey && vault && !balance) {
+    if (wallet?.publicKey && pools && pools[0] && !balance) {
       fetchUserCTokenBalance();
     }
-
-    if (wallet?.publicKey && vault && !price) {
-      fetchPrice();
-    }
-  }, [vault, wallet?.publicKey]);
+  }, [wallet?.publicKey, pools]);
 
   const deposit = async () => {
     if (
@@ -320,6 +313,7 @@ export default function Vaults({ pools }) {
         return;
       }
     }
+    toast.success("Deposit successful!");
     setOperationError("");
     setCurrentTransaction(0);
     setInfoModalVisible(false);
@@ -406,13 +400,14 @@ export default function Vaults({ pools }) {
         return;
       }
     }
+    toast.success("Withdraw successful!");
     setOperationError("");
     setCurrentTransaction(0);
     setInfoModalVisible(false);
     setDepositLoading(false);
   };
 
-  console.log("operationError ->", operationError);
+  console.log("up balance ->", balance);
 
   return (
     <motion.div
@@ -444,6 +439,7 @@ export default function Vaults({ pools }) {
           pools?.map((pool) => (
             <PoolCard
               {...pool}
+              balance={balance}
               onClick={() => {
                 setModalVisible(true);
                 setVault(pool);
@@ -486,8 +482,7 @@ export default function Vaults({ pools }) {
                 value={tokenA?.toFixed(2) || 0}
                 onChange={(e) => {
                   const value = Number(e.target.value);
-                  const priceNum = Number(price);
-                  console.log("price", price);
+                  const priceNum = Number(vault.price);
                   setTokenA(value);
                   setTokenB(priceNum * value);
                 }}
@@ -509,7 +504,7 @@ export default function Vaults({ pools }) {
                 onChange={(e) => {
                   const value = Number(e.target.value);
                   setTokenB(value);
-                  setTokenA(value / price);
+                  setTokenA(value / vault.price);
                 }}
               />
               <Spacer x={0.5} />

@@ -12,16 +12,12 @@ import {
 } from "../utils/theme";
 import { DefaultSeo } from "next-seo";
 import SEO from "../../next-seo.config";
-import { WalletListener } from "../providers/WalletListener";
-import { WalletProvider } from "../providers/WalletProvider";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
-import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet";
-import { SlopeWalletAdapter } from "@solana/wallet-adapter-slope";
-import { GlowWalletAdapter } from "@solana/wallet-adapter-glow";
+import { ToastContainer } from "react-toastify";
+
 import { Layout } from "src/components/layout";
 import "../utils/styles.css";
 import "rc-slider/assets/index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import useDarkMode from "use-dark-mode";
 import { WalletKitProvider } from "@gokiprotocol/walletkit";
@@ -40,6 +36,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         <DefaultSeo {...SEO} />
         <NextUIProvider theme={darkMode.value ? nextDarkTheme : nextLightTheme}>
           <Layout>
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />{" "}
             <Component {...pageProps} />
           </Layout>
         </NextUIProvider>
