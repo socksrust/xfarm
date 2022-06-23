@@ -40,7 +40,7 @@ const Header = () => {
         position: "absolute",
         //borderBottom: "0.1px solid",
         borderBottomColor: "$secondaryText",
-        marginTop: 20,
+        marginTop: 19,
       }}
     >
       <Flex
