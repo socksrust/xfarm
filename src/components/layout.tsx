@@ -5,7 +5,7 @@ import { StackProps } from "@chakra-ui/react";
 
 import Header from "./header";
 import Footer from "./footer";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 const BackgroundImage = styled.img`
   position: absolute;

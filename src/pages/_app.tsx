@@ -1,9 +1,8 @@
 import { AppProps } from "next/app";
-import React, { useMemo } from "react";
+import React from "react";
 
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider } from "styled-components";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import {
   darkTheme,
   lightTheme,

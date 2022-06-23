@@ -8,7 +8,6 @@ const withTM = require('next-transpile-modules')([
   '@solana/wallet-adapter-bitpie',
   '@solana/wallet-adapter-blocto',
   '@solana/wallet-adapter-wallets',
-  '@blocto/sdk',
 ]);
 
 /** @type {import('next').NextConfig} */

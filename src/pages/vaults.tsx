@@ -30,7 +30,6 @@ import {
   Transaction,
   PublicKey,
 } from "@solana/web3.js";
-import { Range, getTrackBackground } from "react-range";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import Slider from "rc-slider";
 
@@ -66,7 +65,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
       bTokenDecimals: 9,
-      apy: "20%",
+      apy: "16%",
       comingSoon: false,
     },
     {
@@ -80,7 +79,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "20%",
+      apy: "21%",
       comingSoon: false,
     },
     {
@@ -93,7 +92,7 @@ export async function getStaticProps() {
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       bTokenDecimals: 6,
-      apy: "20%",
+      apy: "19%",
       comingSoon: false,
     },
     {
@@ -106,7 +105,7 @@ export async function getStaticProps() {
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       bTokenDecimals: 6,
-      apy: "69%",
+      apy: "40%",
       comingSoon: false,
     },
     {
@@ -120,7 +119,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "69%",
+      apy: "9%",
       comingSoon: false,
     },
     {
@@ -134,7 +133,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt/logo.png",
       bTokenDecimals: 6,
-      apy: "20%",
+      apy: "6%",
       comingSoon: false,
     },
     {
@@ -148,7 +147,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
       bTokenDecimals: 6,
-      apy: "69%",
+      apy: "7%",
       comingSoon: false,
     },
     {
@@ -162,7 +161,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "69%",
+      apy: "8%",
       comingSoon: false,
     },
   ];
