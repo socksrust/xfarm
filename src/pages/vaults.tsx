@@ -166,6 +166,24 @@ export async function getStaticProps() {
       comingSoon: false,
     },
   ];
+  const prices = {
+    SOL: 0,
+    RAY: 0,
+    GENE: 0,
+    SRM: 0,
+    ATLAS: 0,
+    USDC: 1,
+    USDT: 1,
+  };
+
+  for (let key of Object.keys(prices)) {
+    const priceData = (
+      await (
+        await fetch(`https://price.jup.ag/v1/price?id=${key}&vsToken=${"USDC"}`)
+      ).json()
+    )?.data?.price;
+    prices[key] = priceData;
+  }
 
   let i = 0;
   for (let vault of newVaults) {
@@ -177,10 +195,15 @@ export async function getStaticProps() {
         `https://farm-rpc.herokuapp.com/api/v1/vault_info?vault_name=${vault.vaultName}`
       )
     ).json();
+    const tokenASymbol = vault?.name.split("-")[0];
+    const tokenBSymbol = vault?.name.split("-")[1];
+
     const aTokenBalance = data.tokens_a_added - data.tokens_a_removed;
     const bTokenBalance = data.tokens_b_added - data.tokens_b_removed;
 
-    const tvl = (bTokenBalance / 10 ** vault.bTokenDecimals) * 2;
+    const tvl =
+      (aTokenBalance / 10 ** vault.aTokenDecimals) * prices[tokenASymbol] +
+      (bTokenBalance / 10 ** vault.bTokenDecimals) * prices[tokenBSymbol];
 
     const totalLiquidity = Number(
       (await connection.getTokenSupply(new PublicKey(vault.cTokenMint)))?.value
@@ -189,8 +212,6 @@ export async function getStaticProps() {
     const aTokenBalancePerCToken = aTokenBalance / totalLiquidity;
     const bTokenBalancePerCToken = bTokenBalance / totalLiquidity;
 
-    const tokenASymbol = vault?.name.split("-")[0];
-    const tokenBSymbol = vault?.name.split("-")[1];
     const priceData = (
       await (
         await fetch(
