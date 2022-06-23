@@ -9,7 +9,7 @@ import { SunIcon } from "../utils/icons/SunIcon";
 import { MoonIcon } from "../utils/icons/MoonIcon";
 
 const Logo = styled.img`
-  width: 60px;
+  height: 47px;
 `;
 
 const Header = () => {
@@ -57,19 +57,7 @@ const Header = () => {
           <Link href="/">
             <Spacer x={1.5} />
 
-            <Text
-              size={18}
-              css={{
-                fontFamily: "Roboto Mono",
-                fontWeight: "bold",
-                margin: 0,
-                marginBottom: 5,
-                color: "$primaryText",
-                whiteSpace: "nowrap",
-              }}
-            >
-              xFarmers.
-            </Text>
+            <Logo src="https://uploads-ssl.webflow.com/5fcab3e67813f805b7c856ac/61b6b5cd41dc5915be804fe7_woof-text-p-800.png" />
           </Link>
         </Row>
 

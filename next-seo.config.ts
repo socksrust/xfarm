@@ -1,15 +1,15 @@
-const title = 'xfarmer';
+const title = 'woofer';
 const description =
-  'xfarmer next DEFI generation';
+  'woofer next DEFI generation';
 
 const SEO = {
   title,
   description,
-  canonical: 'https://xfarmer.vercel.app/',
+  canonical: 'https://woofer.vercel.app/',
   openGraph: {
     type: 'website',
     locale: 'en_IE',
-    url: 'https://xfarmer.vercel.app/',
+    url: 'https://woofer.vercel.app/',
     title,
     description,
     images: [
