@@ -1,15 +1,15 @@
-const title = 'woofer';
+const title = 'savebearer';
 const description =
-  'woofer next DEFI generation';
+  'savebearer next DEFI generation';
 
 const SEO = {
   title,
   description,
-  canonical: 'https://woofer.vercel.app/',
+  canonical: 'https://savebearer.vercel.app/',
   openGraph: {
     type: 'website',
     locale: 'en_IE',
-    url: 'https://woofer.vercel.app/',
+    url: 'https://savebearer.vercel.app/',
     title,
     description,
     images: [

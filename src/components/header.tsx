@@ -9,7 +9,7 @@ import { SunIcon } from "../utils/icons/SunIcon";
 import { MoonIcon } from "../utils/icons/MoonIcon";
 
 const Logo = styled.img`
-  height: 47px;
+  height: 70px;
 `;
 
 const Header = () => {
@@ -56,7 +56,7 @@ const Header = () => {
           <Link href="/">
             <Spacer x={1.5} />
 
-            <Logo src="https://uploads-ssl.webflow.com/5fcab3e67813f805b7c856ac/61b6b5cd41dc5915be804fe7_woof-text-p-800.png" />
+            <Logo src="https://convertri.imgix.net/bbe1dbed-a533-11ec-9d37-069352721395/ac8f90e4fa4b49c08a70526d875a59a81a208099/Laraib%20-%20Symmetrical.png?auto=compress,format&dpr=2&fit=scale&w=138&h=107" />
           </Link>
         </Row>
 
