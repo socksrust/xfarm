@@ -38,7 +38,6 @@ const Header = () => {
         right: 0,
         transition: "0.1s",
         position: "absolute",
-        //borderBottom: "0.1px solid",
         borderBottomColor: "$secondaryText",
       }}
     >
