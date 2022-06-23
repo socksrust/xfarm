@@ -2,13 +2,13 @@ import { createTheme } from "@nextui-org/react";
 
 // Define what main theme will look like
 export const darkTheme = {
-  primaryBackground: "#02173B",
+  primaryBackground: "#ED974F",
   secondaryBackground: "white",
   primaryText: "#fff",
-  secondaryText: "rgba(0,0,0,0.8)",
+  secondaryText: "#ED974F",
   outText: "#000",
   cardBoxShadow: "",
-  accent: "#0057FF",
+  accent: "#ED974F",
 };
 
 export const nextDarkTheme = createTheme({

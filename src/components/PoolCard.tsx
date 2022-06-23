@@ -61,7 +61,7 @@ const Card = styled.div<Props>`
   justify-content: flex-start;
   background: white;
   box-shadow: ${(props) => props.theme.cardBoxShadow};
-  border-radius: 0.3rem;
+  border-radius: 2rem;
   cursor: pointer;
 
   ${(p) =>

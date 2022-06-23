@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WalletKitProvider
       defaultNetwork="mainnet-beta"
       app={{
-        name: "xFarm",
+        name: "FFF",
       }}
     >
       <ThemeProvider theme={darkMode.value ? darkTheme : lightTheme}>

@@ -57,19 +57,7 @@ const Header = () => {
           <Link href="/">
             <Spacer x={1.5} />
 
-            <Text
-              size={18}
-              css={{
-                fontFamily: "Roboto Mono",
-                fontWeight: "bold",
-                margin: 0,
-                marginBottom: 5,
-                color: "$primaryText",
-                whiteSpace: "nowrap",
-              }}
-            >
-              xFarmers.
-            </Text>
+            <Logo src="https://famousfoxes.com/logo.b8610686.svg" />
           </Link>
         </Row>
 
