@@ -21,6 +21,8 @@ import { SlopeWalletAdapter } from "@solana/wallet-adapter-slope";
 import { GlowWalletAdapter } from "@solana/wallet-adapter-glow";
 import { Layout } from "src/components/layout";
 import "../utils/styles.css";
+import "rc-slider/assets/index.css";
+
 import useDarkMode from "use-dark-mode";
 import { WalletKitProvider } from "@gokiprotocol/walletkit";
 

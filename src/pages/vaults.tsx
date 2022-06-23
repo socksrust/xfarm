@@ -31,6 +31,7 @@ import {
 } from "@solana/web3.js";
 import { Range, getTrackBackground } from "react-range";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import Slider from "rc-slider";
 
 const Logo = styled.img`
   width: 40px;
@@ -170,6 +171,7 @@ export async function getStaticProps() {
 export default function Vaults({ pools }) {
   const wallet = useConnectedWallet();
   const [isDepositLoading, setDepositLoading] = React.useState(false);
+  const [sliderValue, setSliderValue] = useState(0);
 
   const [tokenA, setTokenA] = useState();
   const [tokenB, setTokenB] = useState();
@@ -327,7 +329,7 @@ export default function Vaults({ pools }) {
       await newInstructionWithdrawFromVault({
         depositorWalletAddress: wallet?.publicKey?.toString(),
         vaultName: vault?.vaultName,
-        maxToken: balance / 10 ** 9,
+        maxToken: ((sliderValue / 100) * balance) / 10 ** 9,
       })
     ).data;
     console.log("json_data", json_data);
@@ -497,6 +499,10 @@ export default function Vaults({ pools }) {
           </Modal.Body>
         ) : (
           <Modal.Body>
+            <Text size={16} b>
+              You will receive:
+            </Text>
+            <Spacer y={0.1} />
             <Row align="center">
               <Input
                 clearable
@@ -508,14 +514,15 @@ export default function Vaults({ pools }) {
                 type="number"
                 disabled
                 value={(
-                  (balance * vault?.aTokenBalancePerCToken) /
+                  ((sliderValue / 100) *
+                    balance *
+                    vault?.aTokenBalancePerCToken) /
                   10 ** vault.aTokenDecimals
                 ).toFixed(4)}
               />
               <Spacer x={0.5} />
               <Logo src={vault?.aTokenImage} />
             </Row>
-            <Spacer y={0.3} />
             <Row align="center">
               <Input
                 clearable
@@ -527,14 +534,22 @@ export default function Vaults({ pools }) {
                 type="number"
                 disabled
                 value={(
-                  (balance * vault?.bTokenBalancePerCToken) /
+                  ((sliderValue / 100) *
+                    balance *
+                    vault?.bTokenBalancePerCToken) /
                   10 ** vault?.bTokenDecimals
                 ).toFixed(4)}
               />
               <Spacer x={0.5} />
               <Logo src={vault?.bTokenImage} />
             </Row>
+
             <Spacer y={0.5} />
+            <Text size={16} b>
+              Pick withdraw percentage:
+            </Text>
+            <Spacer y={0.1} />
+            <Slider value={sliderValue} onChange={setSliderValue} />
           </Modal.Body>
         )}
         <Modal.Footer>
@@ -551,7 +566,7 @@ export default function Vaults({ pools }) {
               <Loading type="points-opacity" color="currentColor" size="sm" />
             ) : (
               <Text size={16} css={{ color: "#fff", fontWeight: "700" }}>
-                {isDeposit ? `Deposit` : `Withdraw all`}
+                {isDeposit ? `Deposit` : `Withdraw ${sliderValue}%`}
               </Text>
             )}
           </Button>
