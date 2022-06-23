@@ -10,6 +10,7 @@ import {
   Spacer,
   Col,
   Loading,
+  Progress,
 } from "@nextui-org/react";
 
 import styled from "styled-components";
@@ -180,6 +181,10 @@ export default function Vaults({ pools }) {
   const [price, setPrice] = useState<number>();
   const [balance, setBalance] = useState<number>(0);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isInfoModalVisible, setInfoModalVisible] = useState(false);
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const [currentTransaction, setCurrentTransaction] = useState(1);
+  const [operationError, setOperationError] = useState("");
   if (typeof window === "undefined") return <></>;
   const isMobile = window.innerWidth < 790;
 
@@ -241,6 +246,8 @@ export default function Vaults({ pools }) {
       return;
     }
 
+    setModalVisible(false);
+    setInfoModalVisible(true);
     setDepositLoading(true);
 
     const json_data = (
@@ -250,7 +257,7 @@ export default function Vaults({ pools }) {
         maxTokenA: tokenA,
       })
     ).data;
-    console.log("json_data", json_data);
+    setTotalTransactions(json_data.length);
 
     const instructions: TransactionInstruction[] = [];
     for (let data of json_data) {
@@ -291,11 +298,13 @@ export default function Vaults({ pools }) {
     }
     const signedTXs = await wallet?.signAllTransactions(transactions);
 
-    for (const signedTX of signedTXs) {
+    for (const [index, signedTX] of signedTXs.entries()) {
       try {
         await new Promise((resolve) => setTimeout(resolve, 3000));
 
         const buf = signedTX.serialize();
+        setCurrentTransaction(index + 1);
+
         const id = await connection.sendRawTransaction(buf, {
           skipPreflight: true,
         });
@@ -307,9 +316,13 @@ export default function Vaults({ pools }) {
         console.log("=====================");
       } catch (e) {
         setDepositLoading(false);
-        console.log(e);
+        setOperationError("deposit");
+        return;
       }
     }
+    setOperationError("");
+    setCurrentTransaction(0);
+    setInfoModalVisible(false);
     setDepositLoading(false);
   };
 
@@ -323,6 +336,8 @@ export default function Vaults({ pools }) {
       return;
     }
 
+    setModalVisible(false);
+    setInfoModalVisible(true);
     setDepositLoading(true);
 
     const json_data = (
@@ -332,6 +347,7 @@ export default function Vaults({ pools }) {
         maxToken: ((sliderValue / 100) * balance) / 10 ** 9,
       })
     ).data;
+    setTotalTransactions(json_data.length);
     console.log("json_data", json_data);
 
     const instructions: TransactionInstruction[] = [];
@@ -373,27 +389,30 @@ export default function Vaults({ pools }) {
     }
     const signedTXs = await wallet?.signAllTransactions(transactions);
 
-    for (const signedTX of signedTXs) {
+    for (const [index, signedTX] of signedTXs.entries()) {
       try {
         await new Promise((resolve) => setTimeout(resolve, 3000));
 
         const buf = signedTX.serialize();
+        setCurrentTransaction(index + 1);
+
         const id = await connection.sendRawTransaction(buf, {
           skipPreflight: true,
         });
-        console.log("Confirming tx...");
-        await connection.confirmTransaction(id, "finalized");
-        console.log("confirmed");
-        console.log("");
-        console.log("");
-        console.log("=====================");
+        await connection.confirmTransaction(id, "processed");
       } catch (e) {
         setDepositLoading(false);
-        console.log(e);
+        setOperationError("withdraw");
+        return;
       }
     }
+    setOperationError("");
+    setCurrentTransaction(0);
+    setInfoModalVisible(false);
     setDepositLoading(false);
   };
+
+  console.log("operationError ->", operationError);
 
   return (
     <motion.div
@@ -432,6 +451,7 @@ export default function Vaults({ pools }) {
             />
           ))}
       </Row>
+
       <Modal
         closeButton
         blur
@@ -567,6 +587,55 @@ export default function Vaults({ pools }) {
             ) : (
               <Text size={16} css={{ color: "#fff", fontWeight: "700" }}>
                 {isDeposit ? `Deposit` : `Withdraw ${sliderValue}%`}
+              </Text>
+            )}
+          </Button>
+          <Spacer y={0.5} />
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        closeButton
+        blur
+        aria-labelledby="modal-title"
+        open={isInfoModalVisible}
+        onClose={() => setInfoModalVisible(false)}
+      >
+        <Modal.Body>
+          <Text size={16} b>
+            Sending transactions {currentTransaction}/{totalTransactions}
+          </Text>
+          <Progress
+            value={(currentTransaction / totalTransactions) * 100}
+            color="success"
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          {operationError && (
+            <Row justify="flex-start">
+              <Text size={16} b color="error">
+                Transaction fail, retry:
+              </Text>
+            </Row>
+          )}
+          <Button
+            auto
+            onClick={operationError === "deposit" ? deposit : withdraw}
+            disabled={
+              operationError !== "deposit" && operationError !== "withdraw"
+            }
+            style={{
+              height: 45,
+              width: "100%",
+              borderRadius: "2rem",
+            }}
+          >
+            {isDepositLoading ? (
+              <Loading type="points-opacity" color="currentColor" size="sm" />
+            ) : (
+              <Text size={16} css={{ color: "#fff", fontWeight: "700" }}>
+                {operationError === "deposit"
+                  ? `Finish deposit`
+                  : `Finish withdraw`}
               </Text>
             )}
           </Button>
