@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WalletKitProvider
       defaultNetwork="mainnet-beta"
       app={{
-        name: "woof",
+        name: "Solpatrol",
       }}
     >
       <ThemeProvider theme={darkMode.value ? darkTheme : lightTheme}>

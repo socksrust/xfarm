@@ -9,7 +9,7 @@ import { SunIcon } from "../utils/icons/SunIcon";
 import { MoonIcon } from "../utils/icons/MoonIcon";
 
 const Logo = styled.img`
-  height: 47px;
+  height: 40px;
 `;
 
 const Header = () => {
@@ -40,6 +40,7 @@ const Header = () => {
         position: "absolute",
         //borderBottom: "0.1px solid",
         borderBottomColor: "$secondaryText",
+        marginTop: 20,
       }}
     >
       <Flex
@@ -57,7 +58,7 @@ const Header = () => {
           <Link href="/">
             <Spacer x={1.5} />
 
-            <Logo src="https://uploads-ssl.webflow.com/5fcab3e67813f805b7c856ac/61b6b5cd41dc5915be804fe7_woof-text-p-800.png" />
+            <Logo src="https://www.solpatrol.io/_next/static/image/src/logo/1_line_flat.56295665d3420e15376996d50255e4dd.png" />
           </Link>
         </Row>
 

@@ -1,15 +1,15 @@
-const title = 'woofer';
+const title = 'Solpatroler';
 const description =
-  'woofer next DEFI generation';
+  'Solpatroler next DEFI generation';
 
 const SEO = {
   title,
   description,
-  canonical: 'https://woofer.vercel.app/',
+  canonical: 'https://Solpatroler.vercel.app/',
   openGraph: {
     type: 'website',
     locale: 'en_IE',
-    url: 'https://woofer.vercel.app/',
+    url: 'https://Solpatroler.vercel.app/',
     title,
     description,
     images: [
