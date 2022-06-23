@@ -1,27 +1,27 @@
-import { useWalletDialog } from '@solana/wallet-adapter-material-ui';
-import { useAnchorWallet, useWallet } from '@solana/wallet-adapter-react';
-import { useEffect } from 'react';
-import { Button  } from '@chakra-ui/react';
+import { useWalletDialog } from "@solana/wallet-adapter-material-ui";
+import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
+import { useEffect } from "react";
+import { Button } from "@nextui-org/react";
+import { useConnectedWallet, useSolana } from "@saberhq/use-solana";
+import { ConnectWalletButton } from "@gokiprotocol/walletkit";
 
 export const ConnectWallet: React.FC<IButtonProps> = ({ ...props }) => {
-  const wallet = useAnchorWallet();
-  const { connected, disconnect } = useWallet();
-  const { setOpen } = useWalletDialog();
-
-
-  const handleClick = () => setOpen(true);
-
-  if (connected) {
+  const solana = useSolana();
+  const wallet = useConnectedWallet();
+  console.log("solana", solana);
+  console.log("wallet", wallet);
+  if (wallet) {
     return (
-      <Button onClick={disconnect} variant="outline" size="bigger" {...props}>
+      <Button
+        onClick={solana.disconnect}
+        {...props}
+        style={{ borderRadius: "2rem" }}
+        size="sm"
+      >
         Disconnect
       </Button>
     );
   }
 
-  return (
-    <Button backgroundColor="transparent" size="bigger" onClick={handleClick} {...props}>
-      Connect Wallet
-    </Button>
-  );
+  return <ConnectWalletButton style={{ whiteSpace: "pre" }} />;
 };

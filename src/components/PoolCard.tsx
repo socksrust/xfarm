@@ -202,7 +202,7 @@ export default function PoolCard({
               {Intl.NumberFormat("en-US", {
                 notation: "compact",
                 maximumFractionDigits: 2,
-              }).format(comingSoon ? tvl : tvl + 320000)}
+              }).format(tvl)}
             </Text>
           </Col>
         </Row>

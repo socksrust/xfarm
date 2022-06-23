@@ -22,32 +22,27 @@ import { GlowWalletAdapter } from "@solana/wallet-adapter-glow";
 import { Layout } from "src/components/layout";
 import "../utils/styles.css";
 import useDarkMode from "use-dark-mode";
+import { WalletKitProvider } from "@gokiprotocol/walletkit";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter(),
-      new SolletWalletAdapter(),
-      new SlopeWalletAdapter(),
-      new GlowWalletAdapter(),
-    ],
-    []
-  );
   const darkMode = useDarkMode(false);
 
   return (
-    <ThemeProvider theme={darkMode.value ? darkTheme : lightTheme}>
-      <WalletProvider wallets={wallets}>
+    <WalletKitProvider
+      defaultNetwork="mainnet-beta"
+      app={{
+        name: "xFarm",
+      }}
+    >
+      <ThemeProvider theme={darkMode.value ? darkTheme : lightTheme}>
         <DefaultSeo {...SEO} />
-        <WalletListener />
         <NextUIProvider theme={darkMode.value ? nextDarkTheme : nextLightTheme}>
           <Layout>
             <Component {...pageProps} />
           </Layout>
         </NextUIProvider>
-      </WalletProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </WalletKitProvider>
   );
 }
 

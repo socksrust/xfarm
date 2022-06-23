@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Flex } from "@chakra-ui/layout";
 import styled from "styled-components";
 import { Link, Text, Row, Spacer, Switch } from "@nextui-org/react";
-import { ConnectWalletButton } from "../providers/ConnectWalletButton";
+import { ConnectWallet } from "./button/connectWallet";
 import useDarkMode from "use-dark-mode";
 import { SunIcon } from "../utils/icons/SunIcon";
 import { MoonIcon } from "../utils/icons/MoonIcon";
@@ -72,13 +72,8 @@ const Header = () => {
             </Text>
           </Link>
         </Row>
-        <Row
-          justify={"flex-end"}
-          align="center"
-          style={isMobile ? { display: "none" } : {}}
-        >
-          <ConnectWalletButton />
-        </Row>
+
+        <ConnectWallet />
       </Flex>
     </Flex>
   );

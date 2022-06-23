@@ -14,7 +14,7 @@ import {
 
 import styled from "styled-components";
 import { initSdk } from "src/utils/quarry/initSdk";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnectedWallet, useSolana } from "@saberhq/use-solana";
 import PoolCard from "src/components/PoolCard";
 import { connection, fetchVoltLiquidities } from "src/programUtils/helpers";
 import {
@@ -168,20 +168,18 @@ export async function getStaticProps() {
 }
 
 export default function Vaults({ pools }) {
-  const { wallet: will, signTransaction, signAllTransactions } = useWallet();
-  const wallet = will?.adapter;
+  const wallet = useConnectedWallet();
   const [isDepositLoading, setDepositLoading] = React.useState(false);
 
   const [tokenA, setTokenA] = useState();
+  const [tokenB, setTokenB] = useState();
   const [isDeposit, setIsDeposit] = useState(true);
   const [vault, setVault] = useState<any>();
   const [price, setPrice] = useState<number>();
-  const [balance, setBalance] = useState<number>(0.1);
+  const [balance, setBalance] = useState<number>(0);
   const [isModalVisible, setModalVisible] = useState(false);
   if (typeof window === "undefined") return <></>;
   const isMobile = window.innerWidth < 790;
-
-  console.log("pools", pools);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -222,20 +220,20 @@ export default function Vaults({ pools }) {
       }
     };
 
-    if (wallet?.publicKey && vault) {
+    if (wallet?.publicKey && vault && !balance) {
       fetchUserCTokenBalance();
     }
 
-    if (wallet?.publicKey && vault) {
+    if (wallet?.publicKey && vault && !price) {
       fetchPrice();
     }
-  }, [vault]);
+  }, [vault, wallet?.publicKey]);
 
   const deposit = async () => {
     if (
       !wallet?.publicKey ||
-      !signTransaction ||
-      !signAllTransactions ||
+      !wallet?.signTransaction ||
+      !wallet?.signAllTransactions ||
       !vault
     ) {
       return;
@@ -289,7 +287,7 @@ export default function Vaults({ pools }) {
       ).blockhash;
       transactions.push(transaction);
     }
-    const signedTXs = await signAllTransactions(transactions);
+    const signedTXs = await wallet?.signAllTransactions(transactions);
 
     for (const signedTX of signedTXs) {
       try {
@@ -316,8 +314,8 @@ export default function Vaults({ pools }) {
   const withdraw = async () => {
     if (
       !wallet?.publicKey ||
-      !signTransaction ||
-      !signAllTransactions ||
+      !wallet?.signTransaction ||
+      !wallet?.signAllTransactions ||
       !vault
     ) {
       return;
@@ -371,7 +369,7 @@ export default function Vaults({ pools }) {
       ).blockhash;
       transactions.push(transaction);
     }
-    const signedTXs = await signAllTransactions(transactions);
+    const signedTXs = await wallet?.signAllTransactions(transactions);
 
     for (const signedTX of signedTXs) {
       try {
@@ -463,8 +461,14 @@ export default function Vaults({ pools }) {
                 size="xl"
                 placeholder={vault?.name.split("-")[0]}
                 type="number"
-                value={tokenA}
-                onChange={(e) => setTokenA(Number(e.target.value))}
+                value={tokenA?.toFixed(2) || 0}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  const priceNum = Number(price);
+                  console.log("price", price);
+                  setTokenA(value);
+                  setTokenB(priceNum * value);
+                }}
               />
               <Spacer x={0.5} />
               <Logo src={vault?.aTokenImage} />
@@ -479,8 +483,12 @@ export default function Vaults({ pools }) {
                 size="xl"
                 placeholder={vault?.name.split("-")[1]}
                 type="number"
-                disabled
-                value={price && tokenA ? (price * tokenA).toFixed(2) : 0}
+                value={tokenB}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  setTokenB(value);
+                  setTokenA(value / price);
+                }}
               />
               <Spacer x={0.5} />
               <Logo src={vault?.bTokenImage} />
