@@ -41,12 +41,10 @@ const LogoImage = styled.img`
   height: 45px;
 
   border-radius: 50%;
-  z-index: 3;
 `;
 
 const LogoImage2 = styled.img`
   width: 25px;
-  z-index: 2;
   border-radius: 50%;
 `;
 
@@ -145,46 +143,15 @@ export default function PoolCard({
     >
       {comingSoon && <ComingSoonBadge />}
       <Card comingSoon={comingSoon} className={hasBorder ? "dCard" : ""}>
-        <Row align="flex-end" style={{ zIndex: 4, marginTop: 5 }}>
+        <Row align="flex-end" style={{ marginTop: 5 }}>
           <LogoImage src={aTokenImage} />
-          <LogoImage
-            src={bTokenImage}
-            style={{ zIndex: 9, marginLeft: "-20px" }}
-          />
+          <LogoImage src={bTokenImage} style={{ marginLeft: "-20px" }} />
           <Spacer x={0.8} />
           <Text size={28} css={{ color: "$outText", fontWeight: "bold" }}>
             {name}
           </Text>
         </Row>
-        {!comingSoon && goalToStart && (
-          <>
-            <Spacer y={1.5} />
-            <Text
-              size={16}
-              css={{
-                fontFamily: "DM Sans",
-                color: "$secondaryText",
-                fontWeight: "bold",
-              }}
-            >
-              GOAL TO START:{" "}
-              {Intl.NumberFormat("en-US", {
-                notation: "compact",
-                maximumFractionDigits: 0,
-              }).format(goalToStart)}{" "}
-              {name}
-            </Text>
-            <Row align="flex-end" style={{ marginTop: "10px", zIndex: 4 }}>
-              <Progress
-                value={(totalLiquidity / 10 ** decimals / goalToStart) * 100}
-                size="sm"
-                shadow
-                color="success"
-                status="success"
-              />
-            </Row>
-          </>
-        )}
+
         <Spacer y={1.5} />
         <Row>
           <Col>
@@ -226,7 +193,7 @@ export default function PoolCard({
         <Row
           align="flex-end"
           justify="flex-end"
-          style={{ marginTop: "5px", zIndex: 4, opacity: 1 }}
+          style={{ marginTop: "5px", opacity: 1 }}
         >
           <LogoImage2
             src={
