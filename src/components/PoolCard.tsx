@@ -166,7 +166,7 @@ export default function PoolCard({
               APY:
             </Text>
             <Text size={28} css={{ color: "$outText", fontWeight: "bold" }}>
-              {apy}
+              {apy}%
             </Text>
           </Col>
           <Col>

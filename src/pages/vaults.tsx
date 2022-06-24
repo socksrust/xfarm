@@ -11,6 +11,7 @@ import {
   Col,
   Loading,
   Progress,
+  Dropdown,
 } from "@nextui-org/react";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -51,7 +52,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "69%",
+      apy: 69,
       comingSoon: false,
     },
     {
@@ -65,7 +66,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
       bTokenDecimals: 9,
-      apy: "16%",
+      apy: 16,
       comingSoon: false,
     },
     {
@@ -79,7 +80,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "21%",
+      apy: 21,
       comingSoon: false,
     },
     {
@@ -92,7 +93,7 @@ export async function getStaticProps() {
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       bTokenDecimals: 6,
-      apy: "19%",
+      apy: 19,
       comingSoon: false,
     },
     {
@@ -105,7 +106,7 @@ export async function getStaticProps() {
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       bTokenDecimals: 6,
-      apy: "40%",
+      apy: 40,
       comingSoon: false,
     },
     {
@@ -119,7 +120,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "9%",
+      apy: 9,
       comingSoon: false,
     },
     {
@@ -133,7 +134,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt/logo.png",
       bTokenDecimals: 6,
-      apy: "6%",
+      apy: 6,
       comingSoon: false,
     },
     {
@@ -147,7 +148,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
       bTokenDecimals: 6,
-      apy: "7%",
+      apy: 7,
       comingSoon: false,
     },
     {
@@ -161,7 +162,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: "8%",
+      apy: 8,
       comingSoon: false,
     },
   ];
@@ -237,11 +238,11 @@ export async function getStaticProps() {
   };
 }
 
-export default function Vaults({ pools }) {
+export default function Vaults({ pools: pls }) {
   const wallet = useConnectedWallet();
   const [isDepositLoading, setDepositLoading] = React.useState(false);
   const [sliderValue, setSliderValue] = useState(100);
-
+  const [pools, setPools] = useState(pls);
   const [tokenA, setTokenA] = useState();
   const [tokenB, setTokenB] = useState();
   const [isDeposit, setIsDeposit] = useState(true);
@@ -252,8 +253,48 @@ export default function Vaults({ pools }) {
   const [totalTransactions, setTotalTransactions] = useState(0);
   const [currentTransaction, setCurrentTransaction] = useState(1);
   const [operationError, setOperationError] = useState("");
+  const [sortBy, setSortBy] = useState("Sort by");
+  const [searchText, setSearchText] = useState("");
+
   if (typeof window === "undefined") return <></>;
   const isMobile = window.innerWidth < 790;
+
+  useEffect(() => {
+    const filterPoolsByTokenName = (pools) => {
+      let filteredPools: any = [];
+      for (const pool of pools) {
+        if (pool.name.indexOf(searchText)) {
+          filteredPools = [...filteredPools, pool];
+        }
+      }
+      return filteredPools;
+    };
+
+    const sortPoolsByTvl = (pools) => {
+      return pools.sort(function (a, b) {
+        return parseFloat(b.tvl) - parseFloat(a.tvl);
+      });
+    };
+
+    const sortPoolsByApy = (pools) => {
+      return pools.sort(function (a, b) {
+        return parseFloat(b.apy) - parseFloat(a.apy);
+      });
+    };
+
+    let finalFilteredPools = pls;
+
+    if (searchText) {
+      finalFilteredPools = filterPoolsByTokenName(finalFilteredPools);
+    }
+    if (sortBy === "TVL") {
+      finalFilteredPools = sortPoolsByTvl(finalFilteredPools);
+    }
+    if (sortBy === "APY") {
+      finalFilteredPools = sortPoolsByApy(finalFilteredPools);
+    }
+    setPools(finalFilteredPools);
+  }, [searchText, sortBy]);
 
   useEffect(() => {
     const fetchUserCTokenBalance = async () => {
@@ -483,6 +524,44 @@ export default function Vaults({ pools }) {
     >
       <Spacer y={2} />
       <Row
+        justify="flex-end"
+        style={{
+          width: "100%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          flexWrap: "wrap",
+          maxWidth: isMobile ? "100%" : "1150px",
+          backgroundColor: "rgba(255,255,255,0.8)",
+          borderRadius: "0.5rem",
+          padding: 10,
+        }}
+      >
+        <Dropdown>
+          <Dropdown.Button style={{ backgroundColor: "#15181A" }}>
+            {sortBy}
+          </Dropdown.Button>
+          <Dropdown.Menu
+            variant="light"
+            aria-label="Actions"
+            onAction={setSortBy}
+          >
+            <Dropdown.Item key="TVL">TVL</Dropdown.Item>
+            <Dropdown.Item key="APY">APY</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Spacer x={1} />
+
+        <Input
+          placeholder="Search by token name..."
+          type="search"
+          width="200px"
+          clearable
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </Row>
+      <Spacer y={1} />
+      <Row
         justify="space-between"
         style={{
           width: "100%",
@@ -504,7 +583,6 @@ export default function Vaults({ pools }) {
             />
           ))}
       </Row>
-
       <Modal
         closeButton
         blur
