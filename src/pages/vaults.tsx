@@ -352,7 +352,7 @@ export default function Vaults({ pools: pls }) {
     const filterPoolsByTokenName = (pools) => {
       let filteredPools: any = [];
       for (const pool of pools) {
-        if (pool.name.indexOf(searchText)) {
+        if (pool.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1) {
           filteredPools = [...filteredPools, pool];
         }
       }
@@ -360,13 +360,16 @@ export default function Vaults({ pools: pls }) {
     };
 
     const sortPoolsByTvl = (pools) => {
-      return pools.sort(function (a, b) {
+      const sortedPools = [...pools];
+
+      return sortedPools.sort(function (a, b) {
         return parseFloat(b.tvl) - parseFloat(a.tvl);
       });
     };
 
     const sortPoolsByApy = (pools) => {
-      return pools.sort(function (a, b) {
+      const sortedPools = [...pools];
+      return sortedPools.sort(function (a, b) {
         return parseFloat(b.apy) - parseFloat(a.apy);
       });
     };
