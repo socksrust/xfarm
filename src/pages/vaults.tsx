@@ -52,7 +52,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: 69,
+      apy: 39,
       comingSoon: false,
     },
     {
@@ -66,7 +66,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
       bTokenDecimals: 9,
-      apy: 16,
+      apy: 33,
       comingSoon: false,
     },
     {
@@ -80,7 +80,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: 21,
+      apy: 46,
       comingSoon: false,
     },
     {
@@ -93,7 +93,7 @@ export async function getStaticProps() {
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       bTokenDecimals: 6,
-      apy: 19,
+      apy: 39,
       comingSoon: false,
     },
     {
@@ -106,7 +106,7 @@ export async function getStaticProps() {
 
       bTokenImage: "https://www.orca.so/static/media/usdt.43f688a0.svg",
       bTokenDecimals: 6,
-      apy: 40,
+      apy: 35,
       comingSoon: false,
     },
     {
@@ -120,7 +120,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
       bTokenDecimals: 6,
-      apy: 9,
+      apy: 165,
       comingSoon: false,
     },
     {
@@ -134,7 +134,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt/logo.png",
       bTokenDecimals: 6,
-      apy: 6,
+      apy: 16,
       comingSoon: false,
     },
     {
@@ -148,7 +148,7 @@ export async function getStaticProps() {
       bTokenImage:
         "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
       bTokenDecimals: 6,
-      apy: 7,
+      apy: 164,
       comingSoon: false,
     },
     {
@@ -165,8 +165,97 @@ export async function getStaticProps() {
       apy: 8,
       comingSoon: false,
     },
+    {
+      name: "ETH-SOL",
+      vaultName: "RDM.STC.ETH-SOL-V5",
+      cTokenMint: "82awMfhgLiVNnsauiU3fybxmJZcHTHSLb7rUBbjviCZc",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs/logo.png",
+      aTokenDecimals: 8,
+
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+      bTokenDecimals: 9,
+      apy: 26,
+      comingSoon: false,
+    },
+    {
+      name: "SUSHI-USDC",
+      vaultName: "RDM.STC.SUSHI-USDC-V5",
+      cTokenMint: "2Gse4mgsT1nkMFa9ws3wGX82s1kMcFdQMEHDCqKVcPRP",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/ChVzxWRmrTeSgwd3Ui3UumcN8KX7VK3WaD4KGeSKpypj/logo.png",
+      aTokenDecimals: 8,
+
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
+      bTokenDecimals: 6,
+      apy: 34,
+      comingSoon: false,
+    },
+    {
+      name: "DFL-USDC",
+      vaultName: "RDM.STC.DFL-USDC-V5",
+      cTokenMint: "PxrkELa9TAgunbn8zxakHmwEjfWWdv8nXgxqmRAsFLu",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/DFL1zNkaGPWm1BqAVqRjCZvHmwTFrEaJtbzJWgseoNJh/logo.png",
+      aTokenDecimals: 9,
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
+      bTokenDecimals: 6,
+      apy: 16,
+      comingSoon: false,
+    },
+
+    {
+      name: "ETH-USDC",
+      vaultName: "RDM.STC.ETH-USDC-V5",
+      cTokenMint: "836L8EsGTgAU4JLoGNTbAy9qcPpkfJoyq2u2T6KRZnQh",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs/logo.png",
+      aTokenDecimals: 8,
+
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
+      bTokenDecimals: 6,
+      apy: 32,
+      comingSoon: false,
+    },
+    {
+      name: "stSOL-USDC",
+      vaultName: "RDM.STC.STSOL-USDC-V5",
+      cTokenMint: "39HMrpuentqSNUWbcpiDzbzf7WvBwjmbPePvPbdZ21sy",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/7dHbWXmci3dT8UFYWYZweBLXgycu7Y3iL6trKn1Y7ARj/logo.png",
+      aTokenDecimals: 9,
+
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/BXXkv6z8ykpG1yuvUDPgh732wzVHB69RnB9YgSYh3itW/logo.png",
+      bTokenDecimals: 6,
+      apy: 51,
+      comingSoon: false,
+    },
+    {
+      name: "POLIS-RAY",
+      vaultName: "RDM.STC.POLIS-RAY-V5",
+      cTokenMint: "65Qh3z2n1Ma6E1vyKauVDinm1fus9q3zxPaUgTy5SpaF",
+      aTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/poLisWXnNRwC6oBu1vHiuKQzFjGL4XDSu4g9qjz9qVk/logo.png",
+      aTokenDecimals: 8,
+
+      bTokenImage:
+        "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+      bTokenDecimals: 6,
+      apy: 19,
+      comingSoon: false,
+    },
   ];
   const prices = {
+    DFL: 0,
+    SUSHI: 0,
+    stSOL: 0,
+    ETH: 0,
+    POLIS: 0,
     SOL: 0,
     RAY: 0,
     GENE: 0,
