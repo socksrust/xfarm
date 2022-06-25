@@ -8,7 +8,7 @@ import {
   Checkbox,
   Input,
   Spacer,
-  Col,
+  Switch,
   Loading,
   Progress,
   Dropdown,
@@ -344,11 +344,32 @@ export default function Vaults({ pools: pls }) {
   const [operationError, setOperationError] = useState("");
   const [sortBy, setSortBy] = useState("Sort by");
   const [searchText, setSearchText] = useState("");
+  const [showStaked, setShowStaked] = useState(false);
 
   if (typeof window === "undefined") return <></>;
   const isMobile = window.innerWidth < 790;
 
   useEffect(() => {
+    const filterPoolsByStaked = async (pools) => {
+      const walletTokens = await connection.getParsedTokenAccountsByOwner(
+        wallet?.publicKey,
+        {
+          programId: TOKEN_PROGRAM_ID,
+        }
+      );
+
+      let filteredPools: any = [];
+      for (const pool of pools) {
+        const poolTokenAccount = walletTokens.value.find(
+          (wt) => wt.account.data.parsed.info.mint === pool.cTokenMint
+        );
+        if (poolTokenAccount) {
+          filteredPools = [...filteredPools, pool];
+        }
+      }
+      setPools(filteredPools);
+    };
+
     const filterPoolsByTokenName = (pools) => {
       let filteredPools: any = [];
       for (const pool of pools) {
@@ -385,9 +406,13 @@ export default function Vaults({ pools: pls }) {
     if (sortBy === "APY") {
       finalFilteredPools = sortPoolsByApy(finalFilteredPools);
     }
-    setPools(finalFilteredPools);
-  }, [searchText, sortBy]);
-
+    if (showStaked) {
+      filterPoolsByStaked(finalFilteredPools);
+    } else {
+      setPools(finalFilteredPools);
+    }
+  }, [searchText, sortBy, showStaked]);
+  console.log("showStaked", showStaked);
   useEffect(() => {
     const fetchUserCTokenBalance = async () => {
       try {
@@ -617,6 +642,7 @@ export default function Vaults({ pools: pls }) {
       <Spacer y={2} />
       <Row
         justify="flex-end"
+        align="center"
         style={{
           width: "100%",
           marginLeft: "auto",
@@ -628,6 +654,24 @@ export default function Vaults({ pools: pls }) {
           padding: 10,
         }}
       >
+        <Text
+          size={16}
+          b
+          color="$primaryBackground"
+          margin={0}
+          style={{ margin: 0 }}
+        >
+          Show staked
+        </Text>
+        <Spacer x={0.4} />
+        <Switch
+          checked={showStaked}
+          onChange={(e) => wallet && setShowStaked(!showStaked)}
+          size="lg"
+          disabled={!wallet}
+        />
+
+        <Spacer x={1} />
         <Dropdown>
           <Dropdown.Button style={{ backgroundColor: "#15181A" }}>
             {sortBy}
